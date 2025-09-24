@@ -5,12 +5,12 @@ using UnityEngine.UI;
 [Serializable]
 public class CountSave
 {
-    int _count;
-    public int Count { get; set; }
+    public int Count;
 }
 
 public class Count : MonoBehaviour
 {
+    [SerializeField] string _fileName;
     [SerializeField] Text _countText;
     [SerializeField] int _max = 99999;
     [SerializeField] int _min = 0;
@@ -18,11 +18,11 @@ public class Count : MonoBehaviour
     CountSave _countSave;
 
     int _count = 0;
+    const string JSON = ".json";
 
     private void Start()
     {
-        _countSave = new CountSave();
-        TextUpdate();
+        LoadData();
     }
 
     public void TextUpdate()
@@ -51,4 +51,26 @@ public class Count : MonoBehaviour
         _countSave.Count = _count;
         TextUpdate();
     }
+
+    /// <summary>
+    /// データをセーブする関数
+    /// </summary>
+    public void SaveData()
+    {
+        _countSave.Count = _count;
+        SaveManager.SaveDataJson(_fileName + JSON, _countSave);
+    }
+
+    //データをロードする関数
+    public void LoadData()
+    {
+        _countSave = SaveManager.LoadDataJson<CountSave>(_fileName + JSON);
+        if (_countSave == null)
+        {
+            _countSave = new CountSave();
+        }
+        _count = _countSave.Count;
+        TextUpdate();
+    }
+
 }
