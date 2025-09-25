@@ -18,7 +18,6 @@ public class Count : MonoBehaviour
     CountSave _countSave;
 
     int _count = 0;
-    const string JSON = ".json";
 
     private void Start()
     {
@@ -58,13 +57,13 @@ public class Count : MonoBehaviour
     public void SaveData()
     {
         _countSave.Count = _count;
-        SaveManager.SaveDataJson(_fileName + JSON, _countSave);
+        SaveManager.SaveDataPrefs(_fileName, _countSave);
     }
 
     //データをロードする関数
     public void LoadData()
     {
-        _countSave = SaveManager.LoadDataJson<CountSave>(_fileName + JSON);
+        _countSave = SaveManager.LoadDataPrefs<CountSave>(_fileName);
         if (_countSave == null)
         {
             _countSave = new CountSave();
